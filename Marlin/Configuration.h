@@ -1186,7 +1186,7 @@
   #endif
 #endif
 
-#define DEFAULT_EJERK    5.0  // May be used by Linear Advance
+#define DEFAULT_EJERK    3.5  // May be used by Linear Advance
 
 /**
  * Junction Deviation Factor
@@ -1471,14 +1471,14 @@
   #define INVERT_X_DIR false
   #define INVERT_Y_DIR false
   #define INVERT_Z_DIR false
-#elif ENABLED (GTE180) && ENABLED(INVERTXYZ) && DISABLED (CUSTOMDRIVERS) || ENABLED (BEAR) && DISABLED (CUSTOMDRIVERS)
+#elif ENABLED (GTE180) && DISABLED (CUSTOMDRIVERS) || ENABLED (BEAR) && ENABLED(INVERTXYZ) && DISABLED (CUSTOMDRIVERS) 
+  #define INVERT_X_DIR false
+  #define INVERT_Y_DIR true
+  #define INVERT_Z_DIR false  
+#elif ENABLED (GTE180) && ENABLED(INVERTXYZ) && DISABLED (CUSTOMDRIVERS) || ENABLED (BEAR) && DISABLED (CUSTOMDRIVERS) 
   #define INVERT_X_DIR true
   #define INVERT_Y_DIR false
   #define INVERT_Z_DIR true
-#elif ENABLED (GTE180) && DISABLED (CUSTOMDRIVERS) || ENABLED (BEAR) && ENABLED(INVERTXYZ) && DISABLED (CUSTOMDRIVERS)
-  #define INVERT_X_DIR false
-  #define INVERT_Y_DIR true
-  #define INVERT_Z_DIR false
 #elif ENABLED (I3PROC) && DISABLED (CUSTOMDRIVERS)
   #define INVERT_X_DIR true
   #define INVERT_Y_DIR false
@@ -2229,7 +2229,6 @@
  */
 //#define NO_LCD_MENUS
 #if DISABLED (AT1280)
-#else
   #define SLIM_LCD_MENUS   //removes most advanced configuration menus
 #endif
 
@@ -2467,7 +2466,6 @@
     #define ST7920_DELAY_2 DELAY_NS(200)
     #define ST7920_DELAY_3 DELAY_NS(200)
     #define ULTIPANEL
-    #define NEWPANEL
  #elif ENABLED (NEWMODEL) // Screen type & SDcard support
   //#define REPRAP_DISCOUNT_SMART_CONTROLLER
   //#define REPRAP_DISCOUNT_FULL_GRAPHIC_SMART_CONTROLLER
@@ -2479,7 +2477,6 @@
  #else //A10 - I3pro
   #define REPRAP_DISCOUNT_SMART_CONTROLLER
   #define ULTIPANEL
-  #define NEWPANEL
   #endif
 #endif
 
