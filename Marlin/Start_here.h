@@ -24,7 +24,7 @@
 
 //(Step 1) enable 1 base model/frame
 //GT2560 Boards - vscode: default_envs = mega2560 in platformio.ini
-#define GTA10       // A10 & Variants
+//#define GTA10       // A10 & Variants
 //#define GTA20       // A20 & Variants
 //#define MECREATOR2  // Mecreator2 & Variants     
 //#define I3PROA      // I3ProA & Variants
@@ -46,17 +46,17 @@
 //SKR Boards - vscode: default_envs = #default_envs = LPC1768
 //Select 1 board
 //#define BEAR        // Bear MK3s & Variants - tesing 
-//#define BEAR_TURBO   // Bear MK3s Turbo & Variants default_envs = #default_envs = LPC1769
+//#define BEAR_TURBO  // Bear MK3s Turbo & Variants default_envs = #default_envs = LPC1769
 
-//Z Mod pick only 1 or none for stock
+//Z mod pick only 1 or none for stock
 //#define Z320        // Enable to change Zmax to 320  
 //#define Z420        // Enable to change Zmax to 420 
 
 //Extruder mod pick only 1 or none for stock
-//#define BMG18       // BMG 1.8 stepper
-//#define BMG9        // BMG 0.9 stepper
+//#define BMG18       // BMG E 1.8 stepper
+//#define BMG9        // BMG E 0.9 stepper
 
-//XY mod mod pick only 1 or none for stock
+//XY mod pick only 1 or none for stock
 //#define GREYBEAR    // XY 0.9 stepper
 
 //-----------------------------------------------------------------------------------------------------
@@ -142,23 +142,26 @@
 //------------------------------
 //Optional settings & features |
 //------------------------------
-//Note 1024bytes of ram should remain for system to function properly.
+//Note 1000bytes of ram should remain for system stability.
 
 //Optional features
 //#define PLR              // Enabled power loss resume - Only functions from SDcard
 //#define RUNOUT           // Enable filament runout sensor - Only If you have them and want to use them
 //#define BEDCLIPS         // Enable to avoid bed clips (manual or probe) - Only If you have them and want to use them
-//#define LINADV           // Enable linear advance.
 //#define CASELIGHT        // Enable case light menu if board has led header.
-//#define FANSCALING       // Enabled PID FAN SCALING
-//#define EXTRUSIONSCALING // Enabled PID EXTRUSION SCALING
-//#define ACTIONCOMMANDS   // Enable ACTION COMMANDS for use with octoprint
-//#define MESHVALIDATE     // Enable G26 mesh validation does not work well in my testing
-//#define PROGRESSINFO     // Enable print progress info display
-//#define FADE             // Enable fade reduce z correction until 0 at set height 
 
+//Disable to save resources on hardware you dont use
 //#define NOSCREEN         // Disable the screen - Save alot of resources good for octoprint users
 //#define NOSDCARD         // Disable the sdcard slot - Save alot of resources good for octoprint users 
+
+#if DISABLED (AT1280) // disabled only on 1280 boards other wise enabled
+ #define LINADV           // Enable linear advance.
+ #define FANSCALING       // Enabled PID FAN SCALING
+ #define EXTRUSIONSCALING // Enabled PID EXTRUSION SCALING
+ #define ACTIONCOMMANDS   // Enable ACTION COMMANDS for use with octoprint
+ #define MESHVALIDATE     // Enable G26 mesh validation does not work well in my testing
+ #define PROGRESSINFO     // Enable print progress info display
+#endif
 
 //Used to switch the default board of the model selected in step 1
 //#define CUSTOMBOARD // Enable Custom Board
@@ -189,7 +192,7 @@
 #endif
 
 //MCU32 board models
-#if ANY(GTA30, GTE180, GTM201, GTD200, BEAR)
+#if ANY(GTA30, GTE180, GTM201, GTD200, BEAR, BREAR_TURBO)
   #define MCU32
 #endif
 
@@ -219,9 +222,9 @@
 #endif
 
 //Probe offset logic - suggest you mesure yours and adjust as needed. 
-#if DISABLED (MULTIEXTRUDER) && ANY(TOUCHPROBE, FMP) && ANY (GTA10, GTA20) && DISABLED (BEAR)
+#if DISABLED (MULTIEXTRUDER) && ANY(TOUCHPROBE, FMP) && ANY (GTA10, GTA20)
   #define NOZZLE_TO_PROBE_OFFSET { -38, 5, 0 } // Nozzle To Probe offset XYZ A10/A20 - this is what it is on my test machines yours could differ 
-#elif ENABLED (MULTIEXTRUDER) && ANY(TOUCHPROBE, FMP) && ANY (GTA10, GTA20) && DISABLED (BEAR)
+#elif ENABLED (MULTIEXTRUDER) && ANY(TOUCHPROBE, FMP) && ANY (GTA10, GTA20)
   #define NOZZLE_TO_PROBE_OFFSET { -40, 0, 0 }  // Nozzle To Probe offset XYZ A10M+T/A20M+T - this is what it is on my test machines yours could differ
 #elif ANY (BEAR, BEAR_TURBO) && ENABLED (TOUCHPROBE)
   #define NOZZLE_TO_PROBE_OFFSET { 27, 10, 0 } 
@@ -254,7 +257,7 @@
   #define DEFAULT_AXIS_STEPS_PER_UNIT  { 80, 80, 400, 95 }  // ungeared extruder found on a10/a20/a30/i3pro
   //#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 800, 95 } 
   //#define DEFAULT_AXIS_STEPS_PER_UNIT   { 80, 80, 2560, 95 } // M8 Z rod steps 2560 found on old I3pro
-#elif ENABLED (MULTIEXTRUDER) && DISABLED (BEAR)
+#elif ENABLED (MULTIEXTRUDER) && DISABLED (BEAR) && DISABLED (BEAR_TURBO)
     #define DEFAULT_AXIS_STEPS_PER_UNIT  { 80, 80, 400, 430 } // geared extruder found on M & T variants
     //#define DEFAULT_AXIS_STEPS_PER_UNIT  { 80, 80, 800, 430 } 
     //#define DEFAULT_AXIS_STEPS_PER_UNIT  { 80, 80, 2560, 430 } // M8 Z rod steps 2560 found on old I3pro  

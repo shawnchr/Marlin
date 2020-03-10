@@ -105,7 +105,7 @@
  *
  * :[-1, 0, 1, 2, 3, 4, 5, 6, 7]
  */
-#if ENABLED (MCU32) && DISABLED (BEAR)
+#if ENABLED (MCU32) && DISABLED (BEAR) && DISABLED (BEAR_TURBO)
   #define SERIAL_PORT 1
   //#define SERIAL_PORT_2 2
 #elif ANY(AT2560, AT1280)
@@ -171,6 +171,8 @@
   #define MOTHERBOARD BOARD_BTT_SKR_V1_4_TURBO
 #elif ENABLED (NEWMODEL) //Replace NEW MODEL with real name
   #define MOTHERBOARD BOARD_RAMPS_14_EFB   // define new models mainboard
+#else
+  #error No model/frame selected in step 1 
  #endif 
 #endif
 
@@ -785,7 +787,7 @@
 #endif
 
 // Mechanical endstop with COM to ground and NC to Signal uses "false" here (most common setup).
-#if ANY(ENDER3, GTM201, I3PROA, I3PROB, I3PROC, I3PROW, I3PROX, BEAR)
+#if ANY(ENDER3, GTM201, I3PROA, I3PROB, I3PROC, I3PROW, I3PROX, BEAR, BEAR_TURBO)
   #define X_MIN_ENDSTOP_INVERTING false // set to true to invert the logic of the endstop.
   #define Y_MIN_ENDSTOP_INVERTING false // set to true to invert the logic of the endstop.
   #define Z_MIN_ENDSTOP_INVERTING false // set to true to invert the logic of the endstop.
@@ -1662,20 +1664,20 @@
    
    #if ENABLED (MIXT) || ENABLED (CYCLOPST) || ENABLED (TRIEX)
    #define NUM_RUNOUT_SENSORS   3
-   #if DISABLED (BEAR)
+   #if DISABLED (BEAR) && DISABLED (BEAR_TURBO)
    #define FIL_RUNOUT_PIN      66
    #define FIL_RUNOUT2_PIN     67
    #define FIL_RUNOUT3_PIN     68
    #endif
    #elif ENABLED (MIX) || ENABLED (CYCLOPS) || ENABLED (DUELEX)
    #define NUM_RUNOUT_SENSORS   2
-   #if DISABLED (BEAR)
+   #if DISABLED (BEAR) && DISABLED (BEAR_TURBO)
    #define FIL_RUNOUT_PIN      66
    #define FIL_RUNOUT2_PIN     67
    #endif
    #else
    #define NUM_RUNOUT_SENSORS   1
-   #if DISABLED (BEAR)
+   #if DISABLED (BEAR) && DISABLED (BEAR_TURBO)
    #define FIL_RUNOUT_PIN      66
    #endif
    #endif
@@ -1772,9 +1774,7 @@
   // Gradually reduce leveling correction until a set height is reached,
   // at which point movement will be level to the machine's XY plane.
   // The height can be set with M420 Z<height>
-  #if ENABLED (FADE)
-    #define ENABLE_LEVELING_FADE_HEIGHT
-  #endif
+  #define ENABLE_LEVELING_FADE_HEIGHT
 
   // For Cartesian machines, instead of dividing moves on mesh boundaries,
   // split up moves into short segments like a Delta. This follows the
@@ -1868,7 +1868,7 @@
 #endif
 
 // Add a menu item to move between bed corners for manual bed adjustment
-#if DISABLED (BEAR)
+#if DISABLED (BEAR) && DISABLED (BEAR_TURBO)
 #define LEVEL_BED_CORNERS
 #if ENABLED(LEVEL_BED_CORNERS)
   #define LEVEL_CORNERS_INSET_LFRB { 30, 30, 30, 30 } // (mm) Left, Front, Right, Back insets
@@ -1892,11 +1892,10 @@
 
 // Manually set the home position. Leave these undefined for automatic settings.
 // For DELTA this is the top-center of the Cartesian print volume.
-#if ANY (BEAR, BEAR_TURBO)
-  #define MANUAL_X_HOME_POS 0
-  #define MANUAL_Y_HOME_POS -2.2
-  #define MANUAL_Z_HOME_POS 0.2
-#endif
+//#define MANUAL_X_HOME_POS 0
+//#define MANUAL_Y_HOME_POS 0
+//#define MANUAL_Z_HOME_POS 0
+
 
 // Use "Z Safe Homing" to avoid homing with a Z probe outside the bed area.
 //
@@ -1914,9 +1913,9 @@
 #endif
 
 // Homing speeds (mm/m)
-#define HOMING_FEEDRATE_XY (HOMING_FEEDRATE_Z*10)
-#define HOMING_FEEDRATE_Z  240 //4*60
-
+#define HOMING_FEEDRATE_XY (HOMING_FEEDRATE_Z * 10)   //40*60
+#define HOMING_FEEDRATE_Z  (BASE_HOMING_FEEDRATE * 4) //4*60
+#define BASE_HOMING_FEEDRATE 60
 
 // Validate that endstops are triggered on homing moves
 #define VALIDATE_HOMING_ENDSTOPS
@@ -2192,7 +2191,7 @@
  */
 #if DISABLED (NOSDCARD)
   #define SDSUPPORT
-#if ENABLED (MCU32) && ENABLED (SDSUPPORT) && DISABLED (BEAR)
+#if ENABLED (MCU32) && ENABLED (SDSUPPORT) && DISABLED (BEAR) && DISABLED (BEAR_TURBO)
   #define SDIO_SUPPORT
 #endif
 #endif
@@ -2221,9 +2220,7 @@
  * just remove some extraneous menu items to recover space.
  */
 //#define NO_LCD_MENUS
-#if DISABLED (AT1280)
-//nothing
-#else
+#if ENABLED(AT1280)
   #define SLIM_LCD_MENUS   //removes most advanced configuration menus
 #endif
 
